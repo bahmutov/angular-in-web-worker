@@ -1,0 +1,31 @@
+{
+  "name": "angular-in-web-worker",
+  "version": "1.0.0",
+  "description": "Running AngularJS 1.x in web worker",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bahmutov/angular-in-web-worker.git"
+  },
+  "keywords": [
+    "angular",
+    "angularjs",
+    "browser",
+    "web",
+    "worker",
+    "experiment",
+    "demo"
+  ],
+  "author": "Gleb Bahmutov <gleb.bahmutov@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bahmutov/angular-in-web-worker/issues"
+  },
+  "homepage": "https://github.com/bahmutov/angular-in-web-worker",
+  "dependencies": {
+    "console-log-div": "0.5.0"
+  }
+}

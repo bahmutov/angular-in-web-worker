@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+</head>
+
+<body>
+  <div>load angular in web worker, it will run digest cycle after 1 second</div>
+  <div id="output">rendered HTML from web worker will appear hear</div>
+
+  <script src="node_modules/console-log-div/console-log-div.js"></script>
+  <script>
+    console.log('trying to load angular web worker');
+    var worker = new Worker('load-angular-out2.js');
+    worker.onmessage = function (e) {
+      console.log('received message from angular web worker');
+      console.log(e.data);
+      document.getElementById('output').innerHTML = e.data;
+    };
+  </script>
+</body>
+</html>
