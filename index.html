@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+</head>
+
+<body>
+  <h2>Angular 1.x in Web Worker</h2>
+  <p>loads angular in a web worker. The loaded angular will run a digest cycle after 1 second
+  and will send rendered HTML to the main browser window (here). To run, load the index.html
+  using a local webserver, for example <a href="https://www.npmjs.com/package/http-server">http-server</a>.</p>
+  <div id="output">rendered HTML from web worker will replace this text.</div>
+
+  <script src="node_modules/console-log-div/console-log-div.js"></script>
+  <script>
+    console.log('trying to load angular web worker');
+    var worker = new Worker('angular-web-worker.js');
+    worker.onmessage = function (e) {
+      console.log('received message from angular web worker');
+      console.log(e.data);
+      document.getElementById('output').innerHTML = e.data;
+    };
+  </script>
+</body>
+</html>
