@@ -2,6 +2,8 @@
 
 > Running AngularJS 1.x in Web Worker
 
+[Demo](http://glebbahmutov.com/angular-in-web-worker/)
+
 To run: run local static http server in this folder, for example
 [http-server](https://www.npmjs.com/package/http-server), like `http-server -p 3040`
 then open [localhost:3040](http://localhost:3040/). The page should show a text message
