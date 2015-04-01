@@ -25,20 +25,26 @@ var appDefinition = {
         return {
             restrict: 'E',
             scope: true,
-            replace: true,
-            template:("\n<div>\n           <button class=\"btn\" id=\"load\" ng-hide=\"loaded\" ng-click=\"load()\">Load</button>\n" +
-              "<button class=\"btn\" ng-show=\"loaded\" ng-click=\"searchAll()\">Search all month</button>\n           " +
-              "<table ng-if=\"loaded\">\n            <tr>\n             <th ng-repeat=\"day in days\" class=\"day-header\">\n{{day}}\n</th>\n</tr>\n" +
+            replace: false,
+            template:(
+              // "\n<div>\n<button class=\"btn\" id=\"load\" ng-hide=\"loaded\" ng-click=\"load()\">Load</button>\n" +
+              // "<button class=\"btn\" ng-show=\"loaded\" ng-click=\"searchAll()\">Search all month</button>\n" +
+              // "<table id=\"table\" ng-if=\"loaded\">\n" +
+              "<table ng-if=\"loaded\">\n" +
+              // "<tr>\n<th ng-repeat=\"day in days\" class=\"day-header\">\n{{day}}\n</th>\n</tr>\n" +
               "<tr ng-repeat=\"hour in hours\">\n" +
+              //"<tr>\n" +
                 "<td ng-repeat=\"day in days\" class=\"hour-cell\">\n" +
                   "<my-calendar-cell hour=\"{{hour}}\" day=\"{{day}}\"></my-calendar-cell>\n" +
                 "</td>\n" +
               "</tr>\n" +
-            "</table>\n" +
-          "</button>\n"),
+              "</table>\n"
+            //"</div>\n"
+            ),
             link: function(scope, element, attrs) {
                 scope.loaded = false;
-                scope.hours = range(1);
+                scope.hours = range(4);
+                scope.hour = 1;
                 scope.days = DAYS;
 
                 scope.searchAll = function() {
@@ -108,11 +114,14 @@ var appDefinition = {
   renderedApp: function renderedApp(angular) {
     var $timeout = angular.element(document.body).injector().get('$timeout');
     $timeout(function () {
-      console.log('first digest cycle finished, clicking load');
-      var scope = angular.element(document.getElementById('load')).scope();
+      // console.log('first digest cycle finished, clicking load');
+      var calendar = document.querySelector('my-calendar');
+      // console.log('calendar', calendar);
+
+      var scope = angular.element(calendar).scope();
       scope.load();
       $timeout(function () {
-        console.log('finished loading');
+        // console.log('finished loading');
         // console.log(document.body.innerHTML);
         // communicate back to the page
         self.postMessage(document.body.innerHTML);

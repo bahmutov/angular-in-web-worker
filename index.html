@@ -21,40 +21,74 @@
   <script src="app-calendar.js"></script>
   <script src="node_modules/console-log-div/console-log-div.js"></script>
   <script>
-    console.log('trying to load angular web worker');
-    var worker = new Worker('angular-web-worker.js');
 
-    worker.onmessage = function (e) {
-      console.log('received message from angular web worker');
-      if (e.data === 'worker-angular-ready') {
-        console.log(e.data);
+    function checkAllDone() {
+      var allDone = workers.every(function (worker) {
+        return worker.done;
+      });
+      if (allDone) {
+        console.log('all workers done');
 
-        var button = document.getElementById('render');
-        button.attributes.removeNamedItem('disabled');
-        button.addEventListener('click', function () {
-          console.log('sending app definition to web worker');
+        var html = workers.map(function (worker) {
+          return worker.html;
+        }).join('\n');
 
-          if (typeof appDefinition.setupApp === 'function') {
-            appDefinition.setupApp = appDefinition.setupApp.toString();
-          }
+        document.getElementById('output').innerHTML = html;
 
-          if (typeof appDefinition.renderedApp === 'function') {
-            appDefinition.renderedApp = appDefinition.renderedApp.toString();
-          }
-
-          console.time('render');
-          console.profile('render');
-          worker.postMessage(appDefinition);
-        });
-
-      } else {
-        // console.log('unknown message');
-        // console.log(e.data);
-        document.getElementById('output').innerHTML = e.data;
-        console.profileEnd('render');
         console.timeEnd('render');
       }
-    };
+    }
+
+    function singleWorker(k) {
+      var worker = new Worker('angular-web-worker.js');
+
+      worker.onmessage = function (e) {
+        console.log('received message from angular web worker', k);
+        if (e.data === 'worker-angular-ready') {
+          console.log(k + ': ' + e.data);
+        } else {
+          // console.log('unknown message');
+          // console.log(e.data);
+          console.log(k + ': got result');
+          // document.getElementById('output').innerHTML = e.data;
+          worker.done = true;
+          worker.html = e.data;
+          // console.profileEnd('render');
+          // console.timeEnd('render');
+          checkAllDone();
+        }
+      };
+
+      return worker;
+    }
+
+    console.log('trying to load angular web workers');
+    var N = 6, workers = [];
+
+    for (var k = 0; k < N; k += 1) {
+      workers.push(singleWorker(k));
+    }
+
+    var button = document.getElementById('render');
+    button.attributes.removeNamedItem('disabled');
+    button.addEventListener('click', function () {
+      console.log('sending app definition to web workers');
+
+      if (typeof appDefinition.setupApp === 'function') {
+        appDefinition.setupApp = appDefinition.setupApp.toString();
+      }
+
+      if (typeof appDefinition.renderedApp === 'function') {
+        appDefinition.renderedApp = appDefinition.renderedApp.toString();
+      }
+
+      console.time('render');
+      // console.profile('render');
+      workers.forEach(function (worker) {
+        worker.postMessage(appDefinition);
+      });
+    });
+
   </script>
 </body>
 </html>

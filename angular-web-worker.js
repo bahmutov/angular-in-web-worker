@@ -29591,7 +29591,7 @@ benv.setup(function () {
       console.assert(appModuleName && typeof appModuleName === 'string', 'did not get app module name from setup app');
 
       var result = window.angular.bootstrap(document.body, [appModuleName]);
-      console.log('started ng app');
+      console.log('bootstrapped ng app', appModuleName);
 
       if (e.data.renderedApp) {
         var renderedApp = eval('(' + e.data.renderedApp + ')');
