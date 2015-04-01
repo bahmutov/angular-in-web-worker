@@ -29577,29 +29577,34 @@ benv.setup(function () {
   require('./bower_components/angular/angular.js');
   console.log('loaded angular', window.angular.version);
 
-  var html = '<h1 ng-controller="helloController">Hello {{ title }}</h1>';
-  document.body.innerHTML = html;
-  console.log('document.body', document.body.innerHTML);
+  self.postMessage('worker-angular-ready');
 
-  (function setupApp(angular) {
-    angular.module('myApp', [])
-      .controller('helloController', ['$scope', '$timeout', function ($scope, $timeout) {
-        $timeout(function setTitle() {
-          $scope.title = 'from Angular ' + angular.version.full + ' running in Web Worker!';
-          console.log('changed $scope title to "hello from Angular in web worker"');
-          $timeout(function () {
-            console.log('after digest cycle body html is');
-            console.log(document.body.innerHTML);
-            // communicate back to the page
-            self.postMessage(document.body.innerHTML);
-          });
-        }, 1000);
-      }]);
-  }(window.angular));
+  self.onmessage = function (e) {
+    if (e.data && e.data.cmd === 'ngApp') {
+      console.log('worker angular got app definition');
+      document.body.innerHTML = e.data.html;
 
-  (function startApp(angular) {
-    angular.bootstrap(document.body, ['myApp']);
-  }(window.angular));
+      var setupApp = eval('(' + e.data.setupApp + ')');
+      console.assert(typeof setupApp === 'function', 'could not eval setup app code\n' + e.data.setupApp);
+
+      var appModuleName = setupApp(window.angular);
+      console.assert(appModuleName && typeof appModuleName === 'string', 'did not get app module name from setup app');
+
+      var result = window.angular.bootstrap(document.body, [appModuleName]);
+      console.log('started ng app');
+
+      if (e.data.renderedApp) {
+        var renderedApp = eval('(' + e.data.renderedApp + ')');
+        console.assert(typeof renderedApp === 'function', 'could not eval rendered app code\n' + e.data.renderedApp);
+        renderedApp(window.angular);
+      }
+
+    } else {
+      console.log('worker angular got message', e.data);
+    }
+  };
+
+
 
 
 });
