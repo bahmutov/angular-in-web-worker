@@ -14,7 +14,10 @@
   <button id="render" disabled="disabled">Render in Web Worker</button>
 
   <!-- angular app to send to the web worker -->
-  <script src="app.js"></script>
+  <!--
+  <script src="app-hello-world.js"></script>
+  -->
+  <script src="app-calendar.js"></script>
   <script src="node_modules/console-log-div/console-log-div.js"></script>
   <script>
     console.log('trying to load angular web worker');
@@ -38,13 +41,17 @@
             appDefinition.renderedApp = appDefinition.renderedApp.toString();
           }
 
+          console.time('render');
+          console.profile('render');
           worker.postMessage(appDefinition);
         });
 
       } else {
-        console.log('unknown message');
-        console.log(e.data);
+        // console.log('unknown message');
+        // console.log(e.data);
         document.getElementById('output').innerHTML = e.data;
+        console.profileEnd('render');
+        console.timeEnd('render');
       }
     };
   </script>
