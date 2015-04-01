@@ -11,6 +11,8 @@
   using a local webserver, for example <a href="https://www.npmjs.com/package/http-server">http-server</a>.</p>
   <div id="output">rendered HTML from web worker will replace this text.</div>
 
+  <button id="render" disabled="disabled">Render in Web Worker</button>
+
   <script src="node_modules/console-log-div/console-log-div.js"></script>
   <script>
     console.log('trying to load angular web worker');
@@ -44,17 +46,23 @@
       console.log('received message from angular web worker');
       if (e.data === 'worker-angular-ready') {
         console.log(e.data);
-        console.log('sending app definition to web worker');
 
-        if (typeof appDefinition.setupApp === 'function') {
-          appDefinition.setupApp = appDefinition.setupApp.toString();
-        }
+        var button = document.getElementById('render');
+        button.attributes.removeNamedItem('disabled');
+        button.addEventListener('click', function () {
+          console.log('sending app definition to web worker');
 
-        if (typeof appDefinition.renderedApp === 'function') {
-          appDefinition.renderedApp = appDefinition.renderedApp.toString();
-        }
+          if (typeof appDefinition.setupApp === 'function') {
+            appDefinition.setupApp = appDefinition.setupApp.toString();
+          }
 
-        worker.postMessage(appDefinition);
+          if (typeof appDefinition.renderedApp === 'function') {
+            appDefinition.renderedApp = appDefinition.renderedApp.toString();
+          }
+
+          worker.postMessage(appDefinition);
+        });
+
       } else {
         console.log('unknown message');
         console.log(e.data);
