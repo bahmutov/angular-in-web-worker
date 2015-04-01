@@ -38,7 +38,7 @@ var appDefinition = {
           "</button>\n"),
             link: function(scope, element, attrs) {
                 scope.loaded = false;
-                scope.hours = range(24);
+                scope.hours = range(1);
                 scope.days = DAYS;
 
                 scope.searchAll = function() {
