@@ -9,6 +9,7 @@ module.exports = function (grunt) {
       src: [
         'README.md',
         'angular-web-worker.js',
+        'angular-web-worker-1.4.7.js',
         'index.html',
         'node_modules/console-log-div/console-log-div.js'
       ]
