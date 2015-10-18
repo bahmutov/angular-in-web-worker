@@ -11,6 +11,9 @@ and then rendered HTML code computed and sent by the AngularJS application runni
 
 Read [Run Angular in Web Worker](http://glebbahmutov.com/blog/run-angular-in-web-worker/).
 
+The Angular web worker bundle was created using 
+[bahmutov/bundle-angular-for-web-worker](https://github.com/bahmutov/bundle-angular-for-web-worker)
+
 ### Small print
 
 Author: Gleb Bahmutov &copy; 2015
