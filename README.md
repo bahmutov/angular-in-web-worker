@@ -9,6 +9,8 @@ To run: run local static http server in this folder, for example
 then open [localhost:3040](http://localhost:3040/). The page should show a text message
 and then rendered HTML code computed and sent by the AngularJS application running in the web worker.
 
+Read [Run Angular in Web Worker](http://glebbahmutov.com/blog/run-angular-in-web-worker/).
+
 ### Small print
 
 Author: Gleb Bahmutov &copy; 2015
